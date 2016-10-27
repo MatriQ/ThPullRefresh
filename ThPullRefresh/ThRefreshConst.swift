@@ -30,5 +30,5 @@ let ThFootRefreshTextRefreshing = "正在加载..."
 let ThRefreshPanKey = "panGestureRecognizer.state"
 //var ThFootRefreshTextIdle = "上拉加载更多"
 //var ThFootRefreshTextRefreshing = "正在刷新"
-func  DeLayTime(x:Double,closure:()->()){
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(x * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), closure) }
+func  DeLayTime(_ x:Double,closure:@escaping ()->()){
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(x * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure) }

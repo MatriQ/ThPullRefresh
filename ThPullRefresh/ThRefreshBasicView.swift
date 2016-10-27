@@ -20,8 +20,8 @@ class ThRefreshBasicView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
-        self.autoresizingMask = .FlexibleWidth
+        self.backgroundColor = UIColor.clear
+        self.autoresizingMask = .flexibleWidth
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,18 +31,18 @@ class ThRefreshBasicView: UIView {
         super.layoutSubviews()
         
     }
-    override func willMoveToSuperview(newSuperview: UIView?) {
-        super.willMoveToSuperview(newSuperview)
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
         self.superview?.removeObserver(self, forKeyPath: ThHeadRefreshContentOffset)
         if (newSuperview != nil){
-            newSuperview?.addObserver(self, forKeyPath: ThHeadRefreshContentOffset, options: .New  , context: nil)
+            newSuperview?.addObserver(self, forKeyPath: ThHeadRefreshContentOffset, options: .new  , context: nil)
             self.x = 0
             self.width = newSuperview!.width
             self.scrollView = newSuperview as? UIScrollView
             self.scrollviewOrignalInsect = (newSuperview as! UIScrollView).contentInset
         }
     }
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
     }
     

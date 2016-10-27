@@ -11,8 +11,6 @@
 		B03DF4E61C3A5FCF006BA034 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03DF4E51C3A5FCF006BA034 /* ViewController.swift */; };
 		B03DF4EB1C3A5FCF006BA034 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B03DF4EA1C3A5FCF006BA034 /* Assets.xcassets */; };
 		B03DF4EE1C3A5FCF006BA034 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B03DF4EC1C3A5FCF006BA034 /* LaunchScreen.storyboard */; };
-		B03DF4F91C3A5FD0006BA034 /* ThPullRefreshDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03DF4F81C3A5FD0006BA034 /* ThPullRefreshDemoTests.swift */; };
-		B03DF5041C3A5FD0006BA034 /* ThPullRefreshDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03DF5031C3A5FD0006BA034 /* ThPullRefreshDemoUITests.swift */; };
 		B03DF5121C3A60C4006BA034 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B03DF5111C3A60C4006BA034 /* Main.storyboard */; };
 		B03DF5151C3A60E1006BA034 /* ExampleController_one.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03DF5131C3A60E1006BA034 /* ExampleController_one.swift */; };
 		B03DF5161C3A60E1006BA034 /* ExampleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03DF5141C3A60E1006BA034 /* ExampleTableView.swift */; };
@@ -55,11 +53,7 @@
 		B03DF4ED1C3A5FCF006BA034 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B03DF4EF1C3A5FCF006BA034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B03DF4F41C3A5FD0006BA034 /* ThPullRefreshDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThPullRefreshDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B03DF4F81C3A5FD0006BA034 /* ThPullRefreshDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThPullRefreshDemoTests.swift; sourceTree = "<group>"; };
-		B03DF4FA1C3A5FD0006BA034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B03DF4FF1C3A5FD0006BA034 /* ThPullRefreshDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThPullRefreshDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B03DF5031C3A5FD0006BA034 /* ThPullRefreshDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThPullRefreshDemoUITests.swift; sourceTree = "<group>"; };
-		B03DF5051C3A5FD0006BA034 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B03DF5111C3A60C4006BA034 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		B03DF5131C3A60E1006BA034 /* ExampleController_one.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleController_one.swift; sourceTree = "<group>"; };
 		B03DF5141C3A60E1006BA034 /* ExampleTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleTableView.swift; sourceTree = "<group>"; };
@@ -105,8 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				B03DF4E21C3A5FCF006BA034 /* ThPullRefreshDemo */,
-				B03DF4F71C3A5FD0006BA034 /* ThPullRefreshDemoTests */,
-				B03DF5021C3A5FD0006BA034 /* ThPullRefreshDemoUITests */,
 				B03DF4E11C3A5FCF006BA034 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,24 +128,6 @@
 				B03DF4EF1C3A5FCF006BA034 /* Info.plist */,
 			);
 			path = ThPullRefreshDemo;
-			sourceTree = "<group>";
-		};
-		B03DF4F71C3A5FD0006BA034 /* ThPullRefreshDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				B03DF4F81C3A5FD0006BA034 /* ThPullRefreshDemoTests.swift */,
-				B03DF4FA1C3A5FD0006BA034 /* Info.plist */,
-			);
-			path = ThPullRefreshDemoTests;
-			sourceTree = "<group>";
-		};
-		B03DF5021C3A5FD0006BA034 /* ThPullRefreshDemoUITests */ = {
-			isa = PBXGroup;
-			children = (
-				B03DF5031C3A5FD0006BA034 /* ThPullRefreshDemoUITests.swift */,
-				B03DF5051C3A5FD0006BA034 /* Info.plist */,
-			);
-			path = ThPullRefreshDemoUITests;
 			sourceTree = "<group>";
 		};
 		F5AE56551C3AB02E004D75E4 /* ThPullRefresh */ = {
@@ -257,13 +231,16 @@
 				TargetAttributes = {
 					B03DF4DF1C3A5FCF006BA034 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 					};
 					B03DF4F31C3A5FD0006BA034 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 						TestTargetID = B03DF4DF1C3A5FCF006BA034;
 					};
 					B03DF4FE1C3A5FD0006BA034 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 						TestTargetID = B03DF4DF1C3A5FCF006BA034;
 					};
 				};
@@ -343,7 +320,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B03DF4F91C3A5FD0006BA034 /* ThPullRefreshDemoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,7 +328,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F52919ED1C508BAE0053A247 /* ExampleTableView.swift in Sources */,
-				B03DF5041C3A5FD0006BA034 /* ThPullRefreshDemoUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +449,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tanhui.ThPullRefreshDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -485,6 +461,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tanhui.ThPullRefreshDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -496,6 +473,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tanhui.ThPullRefreshDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThPullRefreshDemo.app/ThPullRefreshDemo";
 			};
 			name = Debug;
@@ -508,6 +486,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tanhui.ThPullRefreshDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThPullRefreshDemo.app/ThPullRefreshDemo";
 			};
 			name = Release;
@@ -519,6 +498,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tanhui.ThPullRefreshDemoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = ThPullRefreshDemo;
 				USES_XCTRUNNER = YES;
 			};
@@ -531,6 +511,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tanhui.ThPullRefreshDemoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = ThPullRefreshDemo;
 				USES_XCTRUNNER = YES;
 			};

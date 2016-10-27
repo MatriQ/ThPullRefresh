@@ -8,13 +8,33 @@
 
 import Foundation
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 enum ThHeadRefreshState:Int{
-    case None=0
-    case Idle=1
-    case Pulling=2
-    case Refreshing=3
-    case WillRefresh=4
+    case none=0
+    case idle=1
+    case pulling=2
+    case refreshing=3
+    case willRefresh=4
 }
 
 class ThHeadRefreshView: ThRefreshBasicView {
@@ -24,48 +44,48 @@ class ThHeadRefreshView: ThRefreshBasicView {
     }
     func beginRefresh(){
         if(self.window != nil){
-            self.state = .Refreshing
+            self.state = .refreshing
         }else{
-            self.state = .WillRefresh
+            self.state = .willRefresh
             self.setNeedsDisplay()
         }
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        if(self.state == .WillRefresh){
-            self.state = .Refreshing
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        if(self.state == .willRefresh){
+            self.state = .refreshing
         }
     }
     
     
     //private method
-    func setStates (newState:ThHeadRefreshState , oldState:ThHeadRefreshState){
+    func setStates (_ newState:ThHeadRefreshState , oldState:ThHeadRefreshState){
         if newState==oldState{
             return
         }
         switch(newState){
             
-        case .Idle:
-            if(oldState == .Refreshing){
-                UIView.animateWithDuration(ThHeadRefreshAnimation, animations: {
+        case .idle:
+            if(oldState == .refreshing){
+                UIView.animate(withDuration: ThHeadRefreshAnimation, animations: {
                     self.scrollView?.th_insetT -= self.height
                     
                     }, completion: nil)
             }
             break
-        case .Pulling:
+        case .pulling:
             break
-        case .Refreshing:
-            if(oldState == .Pulling || oldState == .WillRefresh){
-                UIView.animateWithDuration(ThHeadRefreshAnimation, animations: {
+        case .refreshing:
+            if(oldState == .pulling || oldState == .willRefresh){
+                UIView.animate(withDuration: ThHeadRefreshAnimation, animations: {
                     self.scrollView?.th_insetT=(self.scrollView?.th_insetT)!+self.oringalheight!
                     
                     }, completion: nil)
                 if((self.refreshClosure) != nil){
                     self.refreshClosure!()
                 }else{
-                    self.refreshTarget?.performSelector(self.refreshAction!)
+                    self.refreshTarget?.perform(self.refreshAction!)
                 }
             }
             break
@@ -81,27 +101,27 @@ class ThHeadRefreshView: ThRefreshBasicView {
         let offset = self.scrollView?.th_offsetY
         let headExistOffset = 0-(self.scrollView?.contentInset.top)!
         let refreshPoint = headExistOffset - self.height
-        if(self.scrollView?.dragging == true){
+        if(self.scrollView?.isDragging == true){
             
-            if(self.state == .Idle && offset<refreshPoint){
-                self.state = .Pulling
-            }else if (self.state == .Pulling && offset>=refreshPoint){
-                self.state = .Idle
+            if(self.state == .idle && offset<refreshPoint){
+                self.state = .pulling
+            }else if (self.state == .pulling && offset>=refreshPoint){
+                self.state = .idle
             }
-        }else if (self.state == .Pulling){
-            self.state = .Refreshing
+        }else if (self.state == .pulling){
+            self.state = .refreshing
 
         }
         
     }
     
     func stopRefreshing(){
-            UIView.animateWithDuration(ThHeadRefreshCompleteDuration) { () -> Void in
-                self.state = .Idle
-        }
+            UIView.animate(withDuration: ThHeadRefreshCompleteDuration, animations: { () -> Void in
+                self.state = .idle
+        }) 
     }
     //override
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if (keyPath==ThHeadRefreshContentOffset){
             self.adjustStateWithContentOffset()
@@ -112,8 +132,8 @@ class ThHeadRefreshView: ThRefreshBasicView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func willMoveToSuperview(newSuperview: UIView?) {
-        super.willMoveToSuperview(newSuperview)
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
         if(newSuperview != nil){
             self.height = ThHeadRefreshHeight
             self.oringalheight = self.height
@@ -128,7 +148,7 @@ class ThHeadRefreshView: ThRefreshBasicView {
         
     
     
-    var state : ThHeadRefreshState = .Idle
+    var state : ThHeadRefreshState = .idle
         {
         didSet {
             self.setStates(state, oldState: oldValue)

@@ -7,6 +7,26 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
 
 class ThHeadBounceRefreshView: ThHeadRefreshView {
     let l1 = UIView()
@@ -24,12 +44,12 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
     var circleLayer = CAShapeLayer()
     var loadingColor : UIColor? {
         willSet{
-            circleLayer.strokeColor = newValue!.CGColor
+            circleLayer.strokeColor = newValue!.cgColor
         }
     }
     var bgColor : UIColor? {
         willSet{
-            shapeLayer.fillColor = newValue!.CGColor
+            shapeLayer.fillColor = newValue!.cgColor
         }
     }
     override init(frame: CGRect) {
@@ -42,24 +62,24 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
     }
     
 //MARK:private Methods
-    private func configeCircleLayer(){
-        self.circleView.size = CGSizeMake(ThHeadRefreshingCircleRadius * 2.0, ThHeadRefreshingCircleRadius*2.0)
+    fileprivate func configeCircleLayer(){
+        self.circleView.size = CGSize(width: ThHeadRefreshingCircleRadius * 2.0, height: ThHeadRefreshingCircleRadius*2.0)
         circleView.center = self.center
-        circleView.backgroundColor=UIColor.clearColor()
+        circleView.backgroundColor=UIColor.clear
         
-        circleLayer.fillColor = UIColor.clearColor().CGColor
-        circleLayer.strokeColor = self.loadingColor?.CGColor
+        circleLayer.fillColor = UIColor.clear.cgColor
+        circleLayer.strokeColor = self.loadingColor?.cgColor
         circleLayer.lineWidth = 3;
         circleLayer.frame = circleView.bounds
         
         self.circleView.layer.addSublayer(circleLayer)
         self.addSubview(circleView)
     }
-    private func configeShapeLayer(){
+    fileprivate func configeShapeLayer(){
         shapeLayer.frame = self.bounds
         self.layer.addSublayer(shapeLayer)
     }
-    private func updateShapeLayerPath (){
+    fileprivate func updateShapeLayerPath (){
         let bezierPath = UIBezierPath()
         if(self.height<=self.oringalheight){
             let lControlPoint1 = CGPoint(x:0,y:self.oringalheight!)
@@ -74,12 +94,12 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
             r2.center = rControlPoint2
             c.center = CGPoint(x:self.width*0.5 , y:self.oringalheight!)
             
-            bezierPath .moveToPoint(CGPoint(x: 0, y: 0))
-            bezierPath .addLineToPoint(CGPoint(x:self.width, y: 0))
-            bezierPath .addLineToPoint(rControlPoint1)
-            bezierPath.addLineToPoint(lControlPoint1)
-            bezierPath.addLineToPoint(CGPoint(x: 0, y: 0))
-            bezierPath.closePath()
+            bezierPath .move(to: CGPoint(x: 0, y: 0))
+            bezierPath .addLine(to: CGPoint(x:self.width, y: 0))
+            bezierPath .addLine(to: rControlPoint1)
+            bezierPath.addLine(to: lControlPoint1)
+            bezierPath.addLine(to: CGPoint(x: 0, y: 0))
+            bezierPath.close()
         }else{
             self.focusY = self.height
             let rate :CGFloat = 0.75
@@ -99,78 +119,78 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
             r1.center = rControlPoint1
             r2.center = rControlPoint2
             c.center = CGPoint(x:leftWidth , y:self.focusY!)
-            bezierPath .moveToPoint(CGPoint(x: 0, y: 0))
-            bezierPath .addLineToPoint(CGPoint(x:self.width, y: 0))
-            bezierPath .addLineToPoint(CGPoint(x: self.width,y: marginHeight))
+            bezierPath .move(to: CGPoint(x: 0, y: 0))
+            bezierPath .addLine(to: CGPoint(x:self.width, y: 0))
+            bezierPath .addLine(to: CGPoint(x: self.width,y: marginHeight))
             
-            bezierPath.addCurveToPoint(CGPoint(x: leftWidth+1,y: self.focusY!), controlPoint1: rControlPoint1, controlPoint2: rControlPoint2)
-            bezierPath.addLineToPoint(CGPoint(x:leftWidth-1 , y:self.focusY!))
-            bezierPath.addCurveToPoint(CGPoint(x: 0,y: marginHeight), controlPoint1: lControlPoint2, controlPoint2: lControlPoint1)
+            bezierPath.addCurve(to: CGPoint(x: leftWidth+1,y: self.focusY!), controlPoint1: rControlPoint1, controlPoint2: rControlPoint2)
+            bezierPath.addLine(to: CGPoint(x:leftWidth-1 , y:self.focusY!))
+            bezierPath.addCurve(to: CGPoint(x: 0,y: marginHeight), controlPoint1: lControlPoint2, controlPoint2: lControlPoint1)
             
-            bezierPath.closePath()
+            bezierPath.close()
         }
         
-        shapeLayer.path = bezierPath.CGPath
+        shapeLayer.path = bezierPath.cgPath
     }
     func updateCirclePath(){
         circleView.centerY = self.height*0.5
         circleView.centerX = self.centerX
-        if self.state == .Pulling||self.state == .Idle{
+        if self.state == .pulling||self.state == .idle{
             let loadingBezier = UIBezierPath()
-            let center = CGPointMake(circleView.width*0.5, circleView.height*0.5)
-            loadingBezier.addArcWithCenter(center, radius: ThHeadRefreshingCircleRadius , startAngle: CGFloat(-M_PI_2), endAngle:CGFloat((M_PI * 2) * progress - M_PI_2) , clockwise: true)
-            circleLayer.path = loadingBezier.CGPath
-        }else if(self.state == .Refreshing){
+            let center = CGPoint(x: circleView.width*0.5, y: circleView.height*0.5)
+            loadingBezier.addArc(withCenter: center, radius: ThHeadRefreshingCircleRadius , startAngle: CGFloat(-M_PI_2), endAngle:CGFloat((M_PI * 2) * progress - M_PI_2) , clockwise: true)
+            circleLayer.path = loadingBezier.cgPath
+        }else if(self.state == .refreshing){
             //刷新的动画
-            if(circleLayer.animationForKey("refreshing") != nil){
+            if(circleLayer.animation(forKey: "refreshing") != nil){
                 return
             }
             let loadingBezier = UIBezierPath()
-            let center = CGPointMake(circleView.width*0.5, circleView.height*0.5)
-            loadingBezier.addArcWithCenter(center, radius: ThHeadRefreshingCircleRadius , startAngle: CGFloat(-M_PI_2), endAngle:CGFloat((M_PI * 2) * 0.9 - M_PI_2) , clockwise: true)
-            circleLayer.path = loadingBezier.CGPath
+            let center = CGPoint(x: circleView.width*0.5, y: circleView.height*0.5)
+            loadingBezier.addArc(withCenter: center, radius: ThHeadRefreshingCircleRadius , startAngle: CGFloat(-M_PI_2), endAngle:CGFloat((M_PI * 2) * 0.9 - M_PI_2) , clockwise: true)
+            circleLayer.path = loadingBezier.cgPath
             let animate = CABasicAnimation(keyPath: "transform.rotation")
             animate.byValue = M_PI_2*3
             animate.repeatCount=999
             animate.duration = 0.5
             animate.fillMode = kCAFillModeForwards
-            circleLayer.addAnimation(animate, forKey: "refreshing")
+            circleLayer.add(animate, forKey: "refreshing")
         }
     }
     
-    private func removePath(){
+    fileprivate func removePath(){
         if circleLayer.path != nil{
-            circleLayer.removeAnimationForKey("refreshing")
+            circleLayer.removeAnimation(forKey: "refreshing")
             circleLayer.path = nil
         }
     }
-    private func startAnimating(){
+    fileprivate func startAnimating(){
         if(self.displayLink == nil){
-            displayLink = CADisplayLink(target: self, selector: "updateCirclePath")
-            displayLink!.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+            displayLink = CADisplayLink(target: self, selector: #selector(ThHeadBounceRefreshView.updateCirclePath))
+            displayLink!.add(to: RunLoop.current, forMode: RunLoopMode.commonModes)
         }
     }
-    private func stopAnimating(){
-        displayLink?.removeFromRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
-        displayLink?.paused = true
+    fileprivate func stopAnimating(){
+        displayLink?.remove(from: RunLoop.current, forMode: RunLoopMode.commonModes)
+        displayLink?.isPaused = true
         displayLink = nil
         if circleLayer.path != nil{
-            circleLayer.removeAnimationForKey("refreshing")
+            circleLayer.removeAnimation(forKey: "refreshing")
             circleLayer.path = nil
         }
     }
 //MARK:Overrides
-    override func setStates(state: ThHeadRefreshState,oldState : ThHeadRefreshState) {
+    override func setStates(_ state: ThHeadRefreshState,oldState : ThHeadRefreshState) {
         super.setStates(state, oldState: oldState)
         if state==oldState{
             return
         }
         switch(state){
-        case .Refreshing:
+        case .refreshing:
             self.startAnimating()
                 break;
-        case .Idle:
-            if oldState == .Refreshing{
+        case .idle:
+            if oldState == .refreshing{
                 self.stopAnimating()
                 self.removePath()
             }
@@ -181,24 +201,24 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
         
     }
     override func adjustStateWithContentOffset(){
-        if self.state == .Refreshing&&self.scrollView?.dragging==true{
+        if self.state == .refreshing&&self.scrollView?.isDragging==true{
             if( self.scrollView?.th_offsetY < 0-(self.scrollView?.th_insetT)! ){
                 self.scrollView?.th_offsetY = -(self.scrollView?.th_insetT)!
             }
         }
         progress = Double( (self.height-self.oringalheight!)/self.oringalheight!)
-        if(self.scrollView?.dragging == true){
+        if(self.scrollView?.isDragging == true){
             self.startAnimating()
-            if(self.state == .Idle && progress>0.9){
-                self.state = .Pulling
-            }else if (self.state == .Pulling && progress<=0.9){
-                self.state = .Idle
+            if(self.state == .idle && progress>0.9){
+                self.state = .pulling
+            }else if (self.state == .pulling && progress<=0.9){
+                self.state = .idle
             }
-        }else if (self.state == .Pulling){
-            self.state = .Refreshing
+        }else if (self.state == .pulling){
+            self.state = .refreshing
 //            self.stopAnimating()
 //            self.startAnimating()
-        }else if(self.state == .Idle){
+        }else if(self.state == .idle){
             self.stopAnimating()
             self.removePath()
         }
@@ -206,17 +226,17 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
         let offY = 0 - Double((self.scrollView?.th_offsetY)!)
         let culheight = (self.scrollView?.th_insetT)!+self.oringalheight!
         if (offY > Double( culheight )){
-            if(self.scrollView?.dragging==true||self.state == .Idle){
+            if(self.scrollView?.isDragging==true||self.state == .idle){
                 self.height = CGFloat( offY - Double((self.scrollView?.th_insetT)!) )
                 let pan = self.scrollView?.panGestureRecognizer
-                let point = pan?.locationInView(self)
+                let point = pan?.location(in: self)
                 self.focusX = point?.x
-                if(self.scrollView?.dragging==true){
+                if(self.scrollView?.isDragging==true){
                     self.startAnimating()
                 }
             }
-        }else if(self.state == .Refreshing||self.state == .Idle){
-            UIView.animateWithDuration(0.4, animations: { () -> Void in
+        }else if(self.state == .refreshing||self.state == .idle){
+            UIView.animate(withDuration: 0.4, animations: { () -> Void in
                 self.height = self.oringalheight!;
             })
         }
@@ -227,8 +247,8 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
         super.layoutSubviews()
         self.updateShapeLayerPath()
     }
-    override func willMoveToSuperview(newSuperview: UIView?) {
-        super.willMoveToSuperview(newSuperview)
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
 
         if (newSuperview != nil){
             //initial circleView after self
@@ -237,20 +257,20 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
             self.focusX = self.width * 0.5
             self.focusY = self.oringalheight
             shapeLayer.frame = self.bounds
-            self.addObserver(self, forKeyPath: KeyPathX, options: .New, context: nil)
-            self.addObserver(self, forKeyPath: KeyPathY, options: .New, context: nil)
+            self.addObserver(self, forKeyPath: KeyPathX, options: .new, context: nil)
+            self.addObserver(self, forKeyPath: KeyPathY, options: .new, context: nil)
             
-            self.l1.size = CGSizeMake(3, 3)
-            self.l2.size = CGSizeMake(3, 3)
-            self.r1.size = CGSizeMake(3, 3)
-            self.r2.size = CGSizeMake(3, 3)
-            c.size = CGSizeMake(3, 3)
+            self.l1.size = CGSize(width: 3, height: 3)
+            self.l2.size = CGSize(width: 3, height: 3)
+            self.r1.size = CGSize(width: 3, height: 3)
+            self.r2.size = CGSize(width: 3, height: 3)
+            c.size = CGSize(width: 3, height: 3)
             
-            l1.backgroundColor = UIColor.clearColor()
-            l2.backgroundColor = UIColor.clearColor()
-            r1.backgroundColor = UIColor.clearColor()
-            r2.backgroundColor = UIColor.clearColor()
-            c.backgroundColor = UIColor.clearColor()
+            l1.backgroundColor = UIColor.clear
+            l2.backgroundColor = UIColor.clear
+            r1.backgroundColor = UIColor.clear
+            r2.backgroundColor = UIColor.clear
+            c.backgroundColor = UIColor.clear
 
             self.addSubview(l1)
             self.addSubview(l2)
@@ -260,7 +280,7 @@ class ThHeadBounceRefreshView: ThHeadRefreshView {
 
         }
     }
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if (keyPath == KeyPathX || keyPath == KeyPathY){
         }else if keyPath == ThHeadRefreshContentOffset {

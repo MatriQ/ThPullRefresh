@@ -8,12 +8,41 @@
 
 import Foundation
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 enum  ThFootRefreshState : Int {
-    case None = 0
-    case Idle = 1
-    case Refreshing = 2
-    case Nomore = 3
+    case none = 0
+    case idle = 1
+    case refreshing = 2
+    case nomore = 3
 }
 
 class ThFootRefreshView : ThRefreshBasicView {
@@ -23,16 +52,16 @@ class ThFootRefreshView : ThRefreshBasicView {
     }()
     lazy var refreshingLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFontOfSize(15)
-        label.textAlignment = .Center
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.textAlignment = .center
         label.textColor = UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 1.0)
         self.addSubview(label)
         return label
     }()
     lazy var noMoreLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFontOfSize(15)
-        label.textAlignment = .Center
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.textAlignment = .center
         label.textColor = UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 1.0)
         self.addSubview(label)
         return label
@@ -40,28 +69,28 @@ class ThFootRefreshView : ThRefreshBasicView {
     lazy var idleBtn : UIButton = {
        let btn = UIButton()
         self.addSubview(btn)
-        btn.titleLabel!.font = UIFont.systemFontOfSize(15)
-        btn.setTitleColor(UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 1.0), forState: .Normal )
-        btn.addTarget(self, action: "startRefreshing", forControlEvents: .TouchUpInside)
+        btn.titleLabel!.font = UIFont.systemFont(ofSize: 15)
+        btn.setTitleColor(UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 1.0), for: UIControlState() )
+        btn.addTarget(self, action: #selector(ThFootRefreshView.startRefreshing), for: .touchUpInside)
         return btn
     }()
     lazy var indicateView : UIActivityIndicatorView = {
-        let indicateView = UIActivityIndicatorView(activityIndicatorStyle: .White )
+        let indicateView = UIActivityIndicatorView(activityIndicatorStyle: .white )
         self.refreshingLabel.addSubview(indicateView)
             indicateView.startAnimating()
         return indicateView
     }()
-    var state : ThFootRefreshState = .Idle {
+    var state : ThFootRefreshState = .idle {
         didSet{
             self.setStates(state, oldState: oldValue)
         }
     }
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setTitleforState(ThFootRefreshTextIdle, state: .Idle)
-        self.setTitleforState(ThFootRefreshTextRefreshing , state: .Refreshing)
-        self.setTitleforState(ThFootRefreshTextNomore , state: .Nomore )
-        self.setStates(state, oldState: .None)
+        self.setTitleforState(ThFootRefreshTextIdle, state: .idle)
+        self.setTitleforState(ThFootRefreshTextRefreshing , state: .refreshing)
+        self.setTitleforState(ThFootRefreshTextNomore , state: .nomore )
+        self.setStates(state, oldState: .none)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -74,19 +103,19 @@ class ThFootRefreshView : ThRefreshBasicView {
         self.noMoreLabel.frame = self.bounds
         self.indicateView.center = CGPoint(x: self.center.x-100,y: self.center.y)
     }
-    override func willMoveToSuperview(newSuperview: UIView?) {
-        super.willMoveToSuperview(newSuperview)
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
         if newSuperview != nil{
-            newSuperview!.addObserver(self, forKeyPath: ThRefreshPanKey, options: .New , context: nil)
-            newSuperview!.addObserver(self, forKeyPath: "contentOffset", options: .New, context: nil)
+            newSuperview!.addObserver(self, forKeyPath: ThRefreshPanKey, options: .new , context: nil)
+            newSuperview!.addObserver(self, forKeyPath: "contentOffset", options: .new, context: nil)
             self.height = ThFootRefreshHeight
             self.scrollView?.th_insetB += self.height
             self.adjustFrameOfContentSize()
         }
     }
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
-        if self.state == .Idle{
+        if self.state == .idle{
             if keyPath == ThRefreshPanKey{
                 //不超过一个屏幕
                 if ((self.scrollView?.contentSize.height)!+(self.scrollView?.th_insetT)! <= self.scrollView?.height){
@@ -106,13 +135,13 @@ class ThFootRefreshView : ThRefreshBasicView {
     }
     
     
-    func setTitleforState(title :String, state : ThFootRefreshState){
+    func setTitleforState(_ title :String, state : ThFootRefreshState){
         if title.isEmpty{
             return
         }
         switch (title){
             case ThFootRefreshTextIdle :
-                self.idleBtn .setTitle(title, forState: .Normal)
+                self.idleBtn .setTitle(title, for: UIControlState())
                 break
             case ThFootRefreshTextRefreshing :
                 self.refreshingLabel.text = title
@@ -124,10 +153,10 @@ class ThFootRefreshView : ThRefreshBasicView {
                 break
         }
     }
-    private func adjustFrameOfContentSize(){
+    fileprivate func adjustFrameOfContentSize(){
         self.y = (self.scrollView?.contentSize.height)!
     }
-    private func adjustStateWithContentOffset(){
+    fileprivate func adjustStateWithContentOffset(){
         if self.height<=0{
             return
         }
@@ -139,39 +168,39 @@ class ThFootRefreshView : ThRefreshBasicView {
 
         }
     }
-    private func setStates (newState:ThFootRefreshState , oldState:ThFootRefreshState){
+    fileprivate func setStates (_ newState:ThFootRefreshState , oldState:ThFootRefreshState){
         if newState==oldState{
             return
         }
         switch newState {
-        case .Idle :
-            self.noMoreLabel.hidden = true
-            self.refreshingLabel.hidden = true
-            self.idleBtn.hidden = true
-            UIView.animateWithDuration(ThRefreshShortDuration, animations: { () -> Void in
-                self.idleBtn.hidden = false
+        case .idle :
+            self.noMoreLabel.isHidden = true
+            self.refreshingLabel.isHidden = true
+            self.idleBtn.isHidden = true
+            UIView.animate(withDuration: ThRefreshShortDuration, animations: { () -> Void in
+                self.idleBtn.isHidden = false
             })
             break
-        case .Nomore :
-            self.noMoreLabel.hidden = true
-            self.refreshingLabel.hidden = true
-            self.idleBtn.hidden = true
-            UIView.animateWithDuration(ThRefreshShortDuration, animations: { () -> Void in
-                self.noMoreLabel.hidden = false
+        case .nomore :
+            self.noMoreLabel.isHidden = true
+            self.refreshingLabel.isHidden = true
+            self.idleBtn.isHidden = true
+            UIView.animate(withDuration: ThRefreshShortDuration, animations: { () -> Void in
+                self.noMoreLabel.isHidden = false
             })
             break
-        case .Refreshing :
-            self.noMoreLabel.hidden = true
-            self.refreshingLabel.hidden = true
-            self.idleBtn.hidden = true
-            if oldState == .Idle{
-                UIView.animateWithDuration(ThRefreshShortDuration, animations: { () -> Void in
-                    self.refreshingLabel.hidden = false
+        case .refreshing :
+            self.noMoreLabel.isHidden = true
+            self.refreshingLabel.isHidden = true
+            self.idleBtn.isHidden = true
+            if oldState == .idle{
+                UIView.animate(withDuration: ThRefreshShortDuration, animations: { () -> Void in
+                    self.refreshingLabel.isHidden = false
                 })
                 if self.refreshClosure != nil{
                     self.refreshClosure!()
                 }else{
-                    self.refreshTarget?.performSelector(self.refreshAction!)
+                    self.refreshTarget?.perform(self.refreshAction!)
                 }
             }
             
@@ -181,10 +210,10 @@ class ThFootRefreshView : ThRefreshBasicView {
         }
     }
     func startRefreshing(){
-        self.state = .Refreshing
+        self.state = .refreshing
     }
     func footEndRefreshing(){
-        self.state = .Idle
+        self.state = .idle
     }
     deinit{
         self.superview?.removeObserver(self, forKeyPath: "contentOffset" ,context: nil)

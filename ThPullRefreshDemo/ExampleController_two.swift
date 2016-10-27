@@ -13,24 +13,24 @@ class ExampleController_two: UIViewController {
     lazy var dataArr : NSMutableArray = {
         return NSMutableArray()
     }()
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.barTintColor = UIColor.orangeColor()
-        self.navigationController?.navigationBar.barStyle = .BlackTranslucent
+        self.navigationController?.navigationBar.barTintColor = UIColor.orange
+        self.navigationController?.navigationBar.barStyle = .blackTranslucent
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(tableView)
         tableView.frame = self.view.bounds
-        self.tableView.addBounceHeadRefresh(self,bgColor:UIColor.orangeColor(),loadingColor:UIColor.lightGrayColor(), action: "loadNewData")
+        self.tableView.addBounceHeadRefresh(self,bgColor:UIColor.orange,loadingColor:UIColor.lightGray, action: "loadNewData")
         self.tableView.addFootRefresh(self, action: "loadMoreData")
 
     }
     func loadNewData(){
         dataArr.removeAllObjects()
-        for (var i = 0 ;i<5;i++){
+        for i in 0..<5{
             let str = "最新5个cell，第\(i+1)个"
-            dataArr.addObject(str)
+            dataArr.add(str)
         }
         //延时模拟刷新
         DeLayTime(2.0, closure: { () -> () in
@@ -40,9 +40,9 @@ class ExampleController_two: UIViewController {
         
     }
     func loadMoreData(){
-        for (var i = 0 ;i<5;i++){
+        for i in 0..<5 {
             let str = "上拉刷新5个cell，第\(i+1)个"
-            dataArr.addObject(str)
+            dataArr.add(str)
         }
         //延时模拟刷新
         DeLayTime(2.0, closure: { () -> () in

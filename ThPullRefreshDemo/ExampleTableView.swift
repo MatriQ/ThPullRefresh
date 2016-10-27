@@ -23,7 +23,7 @@ class ExampleTableView: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "tableViewCell")
+        self.tableView.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "tableViewCell")
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 44
         self.tableView.tableFooterView = UIView()
@@ -47,7 +47,7 @@ class ExampleTableView: UITableViewController {
             self.dataArr.removeAllObjects()
             for (var i = 0 ;i<5;i++){
                 let str = "最新5个cell，第\(self.index++)个"
-                self.dataArr.addObject(str)
+                self.dataArr.add(str)
             }
             self.tableView.reloadData()
             self.tableView .tableHeadStopRefreshing()
@@ -59,7 +59,7 @@ class ExampleTableView: UITableViewController {
         DeLayTime(2.0, closure: { () -> () in
             for (var i = 0 ;i<10;i++){
                 let str = "上拉刷新10个cell，第\(self.index++)个"
-                self.dataArr.addObject(str)
+                self.dataArr.add(str)
             }
             self.tableView.reloadData()
             self.tableView .tableFootStopRefreshing()
@@ -68,19 +68,19 @@ class ExampleTableView: UITableViewController {
     }
 }
 extension ExampleTableView{
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row%2 == 0{
-            self.performSegueWithIdentifier("segue1", sender: nil)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row%2 == 0{
+            self.performSegue(withIdentifier: "segue1", sender: nil)
         }else{
             self.navigationController?.pushViewController(ExampleController_two(), animated: true)
         }
     }
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView .dequeueReusableCellWithIdentifier("tableViewCell", forIndexPath: indexPath)
-        cell.textLabel?.text=self.dataArr[indexPath.row] as? String
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView .dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath)
+        cell.textLabel?.text=self.dataArr[(indexPath as NSIndexPath).row] as? String
         return cell
     }
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.dataArr.count
     }
 
